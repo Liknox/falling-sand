@@ -1,5 +1,3 @@
-import "./style.css"
-
 function make2DArray(cols, rows) {
 	let arr = new Array(cols)
 	for (let i = 0; i < arr.length; i++) {
@@ -38,3 +36,92 @@ function setup() {
 }
 
 function mouseDragged() {}
+
+function draw() {
+	background(0)
+
+	if (mouseIsPressed) {
+		let mouseCol = floor(mouseX / w)
+		let mouseRow = floor(mouseY / w)
+
+		let matrix = 7
+		let extent = floor(matrix / 2)
+		for (let i = -extent; i <= extent; i++) {
+			for (let j = -extent; j <= extent; j++) {
+				if (random(1) < 0.75) {
+					let col = mouseCol + i
+					let row = mouseRow + j
+					if (withInCols(col) && withInRows(row)) {
+						grid[col][row] = hueValue
+						velocityGrid[col][row] = 1
+					}
+				}
+			}
+		}
+		hueValue += 0.5
+		if (hueValue > 360) {
+			hueValue = 1
+		}
+	}
+
+	for (let i = 0; i < cols; i++) {
+		for (let j = 0; j < rows; j++) {
+			noStroke()
+			if (grid[i][j] > 0) {
+				fill(grid[i][j], 255, 255)
+				let x = i * w
+				let y = j * w
+				square(x, y, w)
+			}
+		}
+	}
+
+	let nextGrid = make2DArray(cols, rows)
+	let nextVelocityGrid = make2DArray(cols, rows)
+
+	for (let i = 0; i < cols; i++) {
+		for (let j = 0; j < rows; j++) {
+			let state = grid[i][j]
+			let velocity = velocityGrid[i][j]
+			let moved = false
+			if (state > 0) {
+				let newPos = int(j + velocity)
+				for (let y = newPos; y > j; y--) {
+					let below = grid[i][y]
+					let dir = 1
+					if (random(1) < 0.5) {
+						dir *= -1
+					}
+					let belowA = -1
+					let belowB = -1
+					if (withInCols(i + dir)) belowA = grid[i + dir][y]
+					if (withInCols(i - dir)) belowB = grid[i - dir][y]
+
+					if (below === 0) {
+						nextGrid[i][y] = state
+						nextVelocityGrid[i][y] = velocity + gravity
+						moved = true
+						break
+					} else if (belowA === 0) {
+						nextGrid[i + dir][y] = state
+						nextVelocityGrid[i + dir][y] = velocity + gravity
+						moved = true
+						break
+					} else if (belowB === 0) {
+						nextGrid[i - dir][y] = state
+						nextVelocityGrid[i - dir][y] = velocity + gravity
+						moved = true
+						break
+					}
+				}
+			}
+
+			if (state > 0 && !moved) {
+				nextGrid[i][j] = grid[i][j]
+				nextVelocityGrid[i][j] = velocityGrid[i][j] + gravity
+			}
+		}
+	}
+	grid = nextGrid
+	velocityGrid = nextVelocityGrid
+}
