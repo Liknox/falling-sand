@@ -1,10 +1,10 @@
 {
 	"name": "falling-sand",
 	"private": true,
-	"version": "0.8.7",
+	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"dev": "vite --port 3000",
+		"start": "vite --port 3000",
 		"build": "vite build",
 		"preview": "vite preview",
 		"format": "prettier --write \"*.@(js|ts|jsx|tsx|vue|css|scss|module.css|module.scss)\""
