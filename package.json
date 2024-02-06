@@ -1,14 +1,16 @@
 {
-  "name": "falling-sand",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^5.0.8"
-  }
+	"name": "falling-sand",
+	"private": true,
+	"version": "0.8.7",
+	"type": "module",
+	"scripts": {
+		"dev": "vite --port 3000",
+		"build": "vite build",
+		"preview": "vite preview",
+		"format": "prettier --write \"*.@(js|ts|jsx|tsx|vue|css|scss|module.css|module.scss)\""
+	},
+	"devDependencies": {
+		"prettier": "^3.2.5",
+		"vite": "^5.0.8"
+	}
 }
